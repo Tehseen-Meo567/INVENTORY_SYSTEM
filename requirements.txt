@@ -1,0 +1,11 @@
+streamlit>=1.50
+pandas
+numpy
+scikit-learn
+reportlab
+groq
+python-dotenv
+# optional (real ChromaDB search; the app falls back to built-in search without it):
+# chromadb
+# optional (next step - wrap the agents in CrewAI):
+# crewai
