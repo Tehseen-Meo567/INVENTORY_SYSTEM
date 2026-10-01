@@ -3,9 +3,7 @@ pandas
 numpy
 scikit-learn
 reportlab
-groq
 python-dotenv
-# optional (real ChromaDB search; the app falls back to built-in search without it):
-# chromadb
-# optional (next step - wrap the agents in CrewAI):
-# crewai
+groq
+chromadb          # real vector database for the document search (RAG)
+crewai[litellm]   # CrewAI agents; the litellm extra is REQUIRED to talk to Groq

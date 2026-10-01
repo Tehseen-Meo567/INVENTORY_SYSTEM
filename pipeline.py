@@ -17,6 +17,9 @@ def get_retriever():
     if _retriever is None: _retriever = Retriever(DATA / "vendor_docs")
     return _retriever
 
+def reset_trust():
+    _trust.clear()
+
 def trust_for(vendors):
     names = vendors.drop_duplicates("vendor_id").set_index("vendor_id").vendor_name.to_dict()
     for vid, n in names.items():

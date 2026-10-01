@@ -14,6 +14,11 @@ def get_data(): return pl.load_data()
 @st.cache_resource
 def get_rag(): return pl.get_retriever()
 
+@st.cache_resource
+def get_tfidf():
+    from rag import Retriever
+    return Retriever(pl.DATA / "vendor_docs", engine="tfidf")
+
 data = get_data(); get_rag()
 ss = st.session_state
 ss.setdefault("cases", {}); ss.setdefault("ledger", []); ss.setdefault("chat", []); ss.setdefault("pid", None)
@@ -30,13 +35,27 @@ with st.sidebar:
     max_pct = st.slider("Never pay more than (% of list)", 90, 110, 100)
     rounds = st.slider("Max negotiation rounds", 1, 5, 3)
     st.divider()
-    st.write("🧠 AI brain:", "**Groq connected**" if llm.available() else "**Offline demo mode** (no GROQ_API_KEY)")
-    st.write("📚 Document search:", f"**{pl.get_retriever().mode}**")
+    st.subheader("🧠 Groq AI brain")
+    def _clear_key():
+        llm.clear_key(); ss.applied_key = None; ss.key_input = ""; pl.reset_trust()
+    key_in = st.text_input("Groq API key", type="password", key="key_input", placeholder="gsk_...  (or put it in .env)")
+    model_in = st.selectbox("Model", llm.MODELS, index=llm.MODELS.index(llm.model()) if llm.model() in llm.MODELS else 0)
+    if key_in and key_in != ss.get("applied_key"):
+        llm.set_key(key_in); ss.applied_key = key_in; pl.reset_trust()
+    if model_in != llm.model():
+        llm.set_key(None, model_in); pl.reset_trust()
+    b1, b2 = st.columns(2)
+    if b1.button("Test Groq connection"):
+        ok, msg = llm.test_connection(); (st.success if ok else st.error)(msg)
+    b2.button("Clear key", on_click=_clear_key)
+    st.write("Status:", "**Groq key set**" if llm.available() else "**Offline demo mode** (no key)")
+    info = pl.get_retriever().info()
+    st.write("📚 Document search:", f"**{info['engine']}**")
 
 stock = pl.stock_table(data, as_of)
 risky = stock[stock.status.isin(["URGENT", "WARNING"])]
 
-tabs = st.tabs(["📊 Dashboard", "🚨 Stock Alerts", "🏭 Vendors", "🤝 Negotiation", "✅ Approval & Order", "💬 Ask Assistant"])
+tabs = st.tabs(["📊 Dashboard", "🚨 Stock Alerts", "🏭 Vendors", "🤝 Negotiation", "✅ Approval & Order", "📚 Doc Search", "🧠 CrewAI Agents", "💬 Ask Assistant"])
 
 # ---------- dashboard ----------
 with tabs[0]:
@@ -139,8 +158,67 @@ with tabs[4]:
             st.download_button("⬇️ Download Purchase Order (PDF)", pl.make_po_pdf(case), file_name=f"PO_{case['product_id']}.pdf", mime="application/pdf")
         else: st.error("Rejected. Nothing was ordered.")
 
-# ---------- assistant ----------
+# ---------- document search (RAG) ----------
 with tabs[5]:
+    st.header("📚 Vendor Document Search (RAG)")
+    rag = pl.get_retriever(); info = rag.info()
+    m = st.columns(3); m[0].metric("Search engine", info["engine"]); m[1].metric("Text pieces stored", info["chunks"]); m[2].metric("Vendors", info["vendors"])
+    st.caption(f"Stored in: {info['folder']}")
+    if info["note"]: st.warning(info["note"] + " (the app fell back automatically)")
+    st.write("Every paragraph in the vendor files (invoices, reviews, contracts) is stored as one piece. Ask a question and the search returns the closest pieces. This is what the Vendor Checker uses as proof.")
+    names = data["vendors"].drop_duplicates("vendor_id").set_index("vendor_id").vendor_name.to_dict()
+    q = st.text_input("Ask the documents", "Which vendor delivers late or sends damaged items?")
+    c1, c2 = st.columns([3, 1])
+    vsel = c1.selectbox("Search in", ["All vendors"] + [f"{k} - {v}" for k, v in names.items()])
+    k = c2.slider("Results", 1, 10, 5)
+    def show(hits):
+        st.dataframe(pd.DataFrame([{"vendor": names[h["vendor_id"]], "file": h["source"], "match": h["score"], "text": h["text"]} for h in hits]), hide_index=True, width="stretch")
+    if q:
+        vid = None if vsel.startswith("All") else vsel.split(" - ")[0]
+        st.subheader(f"Results from {info['engine']}"); show(rag.search(q, vid, k))
+        if st.checkbox("Compare with simple word-matching (TF-IDF)"):
+            st.subheader("Results from TF-IDF (no ChromaDB)"); show(get_tfidf().search(q, vid, k))
+            st.caption("ChromaDB matches by meaning (with the default model), TF-IDF only by shared words. Try a question with different wording, like 'products arrived broken'.")
+
+# ---------- CrewAI ----------
+with tabs[6]:
+    st.header("🧠 CrewAI Agents")
+    st.write("Here the 5 agents are real **CrewAI agents**: each has a role and goal, chooses which tool to use, and hands its result to the next agent. The tools are the same modules used in the other tabs, so the owner's limits are still enforced by code.")
+    demo = st.checkbox("Demo mode (scripted replies, no key needed). Shows the screen and proves the tools and handoffs work; it is NOT real AI.", value=not llm.available())
+    if not demo and not llm.available(): st.warning("Paste a Groq key in the sidebar to run the real crew.")
+    cc = st.columns(2)
+    opts = ["Let the agents choose the most urgent"] + risky.name.tolist()
+    pick = cc[0].selectbox("Product", opts)
+    mode = cc[1].radio("Crew style", ["sequential", "hierarchical"], horizontal=True, help="Hierarchical adds a manager agent. Experimental, slower.")
+    if st.button("▶ Run CrewAI crew", type="primary", disabled=not (demo or llm.available())):
+        try:
+            import crew_run
+            fp = None if pick.startswith("Let") else risky[risky.name == pick].iloc[0].product_id
+            with st.spinner("Agents are working... (real Groq runs can take 30-90 seconds)"):
+                ss.crew = crew_run.run_crew(as_of.isoformat(), budget, capacity, target_pct / 100, max_pct / 100, rounds, fp, mode, "demo" if demo else None)
+                ss.crew["demo"] = demo
+        except Exception as e:
+            ss.crew = None; st.error(f"Crew failed: {type(e).__name__}: {str(e)[:300]}. Tip: the Fast pipeline tabs still work, and Groq's free tier has rate limits.")
+    res = ss.get("crew")
+    if res:
+        if res.get("demo"): st.info("This run used the scripted demo model, not a real AI.")
+        st.subheader("Owner summary (final output of the crew)"); st.success(res["final"])
+        case = res["case"]
+        if case:
+            n = case["negotiation"]
+            st.write(f"**Deal found:** {case['vendor']['vendor_name']}, {n['status']}" + (f", Rs. {n['final_price']:,.0f} per piece, saving Rs. {n['saving']:,.0f}" if n["status"] == "accepted" else ""))
+            if n["status"] == "accepted" and st.button("Send this deal to the Approval tab"):
+                ss.cases[case["product_id"]] = case; ss.pid = case["product_id"]; st.success("Done. Open the Approval & Order tab.")
+        st.subheader("What each agent did")
+        for t in res["trace"]:
+            if t["kind"] == "tool":
+                st.markdown("🔧 " + t["text"])
+                if t.get("thought"): st.caption("Thought: " + t["thought"])
+            else:
+                with st.expander(f"✅ {t.get('agent') or 'Agent'} finished"): st.write(t["text"])
+
+# ---------- assistant ----------
+with tabs[7]:
     st.header("Ask the Assistant")
     st.caption("Try: 'Which products will run out soon?' or 'Which vendor is not trustworthy?'")
     for m in ss.chat:
