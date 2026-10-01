@@ -1,0 +1,9 @@
+product_id,name,category,current_stock,unit_cost,selling_price
+P01,Power Bank 10000mAh,Power,40,1900,2599
+P02,Wireless Earbuds,Audio,65,2800,3799
+P03,Phone Case (assorted),Accessories,600,180,399
+P04,USB-C Cable 1m,Accessories,110,220,449
+P05,Screen Protector,Accessories,900,60,199
+P06,Bluetooth Speaker,Audio,22,3400,4699
+P07,Smart Watch,Wearables,150,4200,5499
+P08,Car Charger,Power,420,450,799

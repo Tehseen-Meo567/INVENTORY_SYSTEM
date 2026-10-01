@@ -1,0 +1,25 @@
+vendor_id,vendor_name,city,product_id,unit_price,moq,lead_days,payment_terms,flex_pct
+V1,Lahore Gadget Hub,Lahore,P01,1976,50,6,30 days credit,0.94
+V2,Karachi MegaTrade,Karachi,P01,1767,150,11,50% advance,0.97
+V3,Peshawar Tech Traders,Peshawar,P01,1900,30,3,30 days credit,0.95
+V1,Lahore Gadget Hub,Lahore,P02,2912,20,7,30 days credit,0.94
+V3,Peshawar Tech Traders,Peshawar,P02,2800,10,4,30 days credit,0.95
+V4,Rawalpindi Wholesale Co,Rawalpindi,P02,2716,80,8,30 days credit,0.92
+V2,Karachi MegaTrade,Karachi,P03,167,300,12,50% advance,0.97
+V4,Rawalpindi Wholesale Co,Rawalpindi,P03,175,400,8,30 days credit,0.92
+V5,Faisalabad Imports,Faisalabad,P03,180,150,8,50% advance,0.96
+V3,Peshawar Tech Traders,Peshawar,P04,220,50,5,30 days credit,0.95
+V4,Rawalpindi Wholesale Co,Rawalpindi,P04,213,400,10,30 days credit,0.92
+V5,Faisalabad Imports,Faisalabad,P04,220,150,9,50% advance,0.96
+V2,Karachi MegaTrade,Karachi,P05,56,300,11,50% advance,0.97
+V4,Rawalpindi Wholesale Co,Rawalpindi,P05,58,400,8,30 days credit,0.92
+V5,Faisalabad Imports,Faisalabad,P05,60,150,9,50% advance,0.96
+V1,Lahore Gadget Hub,Lahore,P06,3536,20,6,30 days credit,0.94
+V3,Peshawar Tech Traders,Peshawar,P06,3400,10,5,30 days credit,0.95
+V5,Faisalabad Imports,Faisalabad,P06,3400,30,8,50% advance,0.96
+V1,Lahore Gadget Hub,Lahore,P07,4368,20,6,30 days credit,0.94
+V4,Rawalpindi Wholesale Co,Rawalpindi,P07,4074,80,10,30 days credit,0.92
+V5,Faisalabad Imports,Faisalabad,P07,4200,30,8,50% advance,0.96
+V2,Karachi MegaTrade,Karachi,P08,418,300,13,50% advance,0.97
+V3,Peshawar Tech Traders,Peshawar,P08,450,50,4,30 days credit,0.95
+V4,Rawalpindi Wholesale Co,Rawalpindi,P08,436,400,8,30 days credit,0.92
