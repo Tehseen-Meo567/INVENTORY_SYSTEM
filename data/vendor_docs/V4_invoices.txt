@@ -1,0 +1,13 @@
+Past invoices and delivery records for Rawalpindi Wholesale Co (Rawalpindi)
+
+Invoice INV-V4-101 | Order of 131 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V4-102 | Order of 222 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V4-103 | Order of 292 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V4-104 | Order of 343 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V4-105 | Order of 381 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V4-106 | Order of 202 units | Delivered on time | Condition: all items intact

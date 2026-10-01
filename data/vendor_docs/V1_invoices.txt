@@ -1,0 +1,13 @@
+Past invoices and delivery records for Lahore Gadget Hub (Lahore)
+
+Invoice INV-V1-101 | Order of 304 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V1-102 | Order of 137 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V1-103 | Order of 298 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V1-104 | Order of 225 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V1-105 | Order of 337 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V1-106 | Order of 361 units | Delivered on time | Condition: all items intact

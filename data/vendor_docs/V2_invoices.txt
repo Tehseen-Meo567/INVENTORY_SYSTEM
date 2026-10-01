@@ -1,0 +1,13 @@
+Past invoices and delivery records for Karachi MegaTrade (Karachi)
+
+Invoice INV-V2-101 | Order of 222 units | Delivered 8 days late | Condition: all items intact
+
+Invoice INV-V2-102 | Order of 133 units | Delivered 3 days late | Condition: all items intact
+
+Invoice INV-V2-103 | Order of 398 units | Delivered 6 days late | Condition: all items intact
+
+Invoice INV-V2-104 | Order of 235 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V2-105 | Order of 146 units | Delivered on time | Condition: 6% of items damaged on arrival
+
+Invoice INV-V2-106 | Order of 305 units | Delivered on time | Condition: 10% of items damaged on arrival

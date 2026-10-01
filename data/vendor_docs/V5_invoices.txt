@@ -1,0 +1,13 @@
+Past invoices and delivery records for Faisalabad Imports (Faisalabad)
+
+Invoice INV-V5-101 | Order of 217 units | Delivered 8 days late | Condition: all items intact
+
+Invoice INV-V5-102 | Order of 307 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V5-103 | Order of 182 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V5-104 | Order of 305 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V5-105 | Order of 147 units | Delivered on time | Condition: 7% of items damaged on arrival
+
+Invoice INV-V5-106 | Order of 191 units | Delivered on time | Condition: 11% of items damaged on arrival

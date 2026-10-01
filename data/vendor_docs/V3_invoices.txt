@@ -1,0 +1,13 @@
+Past invoices and delivery records for Peshawar Tech Traders (Peshawar)
+
+Invoice INV-V3-101 | Order of 374 units | Delivered 5 days late | Condition: all items intact
+
+Invoice INV-V3-102 | Order of 236 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V3-103 | Order of 148 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V3-104 | Order of 124 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V3-105 | Order of 231 units | Delivered on time | Condition: all items intact
+
+Invoice INV-V3-106 | Order of 273 units | Delivered on time | Condition: all items intact
